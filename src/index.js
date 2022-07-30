@@ -24,7 +24,13 @@ function checksExistsUserAccount(request, response, next) {
 }
 
 function checksCreateTodosUserAvailability(request, response, next) {
-  // Complete aqui
+  const { user } = request;
+
+  if(user.pro == false && user.todos.length >= 10) {
+    response.status(404).json({ error: "User has reached todos limit"})
+  }
+
+  next();
 }
 
 function checksTodoExists(request, response, next) {
@@ -94,7 +100,6 @@ app.post('/todos', checksExistsUserAccount, checksCreateTodosUserAvailability, (
   };
 
   user.todos.push(newTodo);
-
   return response.status(201).json(newTodo);
 });
 
